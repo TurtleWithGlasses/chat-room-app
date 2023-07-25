@@ -28,7 +28,6 @@ def handle_clients(conn, address):
             broadcast(bytes(f"{name} has left the chat room"))
 
 
-
 def accept_client_connections():
     while True:
         client_conn, client_address = sock.accept()
@@ -37,6 +36,11 @@ def accept_client_connections():
         addresses[client_conn] = client_address
 
         Thread(target=handle_clients, args=(client_conn, client_address)).start()
+
+def broadcast(msg, prefix=""):
+    for x in clients:
+        x.send(bytes(prefix, "utf8") + msg)
+
 
 if __name__ == "__main__":
     sock.listen(5)
